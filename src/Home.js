@@ -141,16 +141,12 @@ const Home = () => {
             setloading(false)
             console.log('new sesion id: ' + data.sessionId + 'locs: ' + locs);
         })
-        document.getElementById('join').addEventListener('click', handleChangeJoin)
-        document.getElementById('create').addEventListener('click', handleChangeMake)
-}, []);
-useEffect(() => {
-    console.log('new session id:', sesh, 'locs:', locs);
-  }, [sesh, locs]);
+}, [location.loaded]);
         const makeSession = (event) => {
             // This code will be executed when the button is clicked
             console.log(selectedOptions);
             console.log(location.coordinates);
+            console.log('Loaded' + location.loaded)
             socket.emit('createSession', { amt: numberOfLocations, distance: distance * 1609.34, places: selectedOptions, loc: location.coordinates } );
             setloading(true);
         }
@@ -163,6 +159,9 @@ useEffect(() => {
   if (loading) {
     return <Loading />; // Use your custom loading component
   }
+  else if (!location.loaded){
+    return <LoadingLocation />;
+  }
     else{  
     return (
         <div className='App'>
@@ -173,8 +172,8 @@ useEffect(() => {
             </header>
         <div>
         <div className='buttons'>
-        {(make) ? <button id="create" className='toggled session'>Make Session</button> : <button id="create" className='session'>Make Session</button>} 
-        {(make) ? <button id="join" className='session'>Join Session</button> : <button id="join" className='toggled session'>Join Session</button>}
+        {(make) ? <button id="create" onClick = {handleChangeJoin} className='toggled session'>Make Session</button> : <button id="create" className='session'>Make Session</button>} 
+        {(make) ? <button id="join" className='session' onClick ={handleChangeJoin}>Join Session</button> : <button id="join" className='toggled session'>Join Session</button>}
         <div className='make'>
     {(make) ? <form onSubmit={handleSubmit}>
         <div className='right'>
@@ -197,7 +196,7 @@ useEffect(() => {
         value={distance}
         onChange={handleChangeD}
       />
-      <button id='goMake' className = 'go' onClick ={makeSession} type="submit">GO</button>
+      <button id='goMake' className = 'go' disabled={!location.loaded} onClick ={makeSession} type="submit">GO</button>
       <div>
     </div>
       </div>
@@ -218,7 +217,7 @@ useEffect(() => {
         value={joinCode}
         onChange={handleChangeCode}
       />
-      <button id='goJoin' className='go' onClick = {joinSession} type="submit">GO</button>
+      <button id='goJoin' className='go' onClick = {joinSession} disabled={!location.loaded} type="submit">GO</button>
       </div>
     </form>
     }
@@ -234,7 +233,16 @@ function Loading() {
     return (
       <div className="App">
         {/* You can use CSS animations, SVGs, images, etc., for a better loading indicator */}
-        <p>Loading...</p>
+        <h1 className='oscillating-underline-purp'>Loading...</h1>
+      </div>
+    );
+  }
+
+  function LoadingLocation() {
+    return (
+      <div className="App">
+        {/* You can use CSS animations, SVGs, images, etc., for a better loading indicator */}
+        <h1 className='oscillating-underline-purp'>Loading your location</h1>
       </div>
     );
   }

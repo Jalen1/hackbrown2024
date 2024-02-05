@@ -1,3 +1,4 @@
+require('dotenv').config()
 const googleMapsClient = require('@google/maps').createClient({
     key: process.env.API_KEY,
     Promise: Promise // Promises support is not enabled by default

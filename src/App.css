@@ -67,6 +67,11 @@
   display: inline-block;
   cursor: pointer;
 }
+.oscillating-underline-purp {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
 
 .oscillating-underline::after {
   content: '';
@@ -76,6 +81,18 @@
   bottom: 0;
   height: 2px; /* Thickness of the underline */
   background: linear-gradient(90deg, transparent, cyan, transparent); /* Oscillation color */
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  animation: oscillate 2s linear infinite; /* Adjust time as needed */
+}
+.oscillating-underline-purp::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px; /* Thickness of the underline */
+  background: linear-gradient(90deg, transparent, rgb(172, 72, 199), transparent); /* Oscillation color */
   background-repeat: no-repeat;
   background-size: 200% 100%;
   animation: oscillate 2s linear infinite; /* Adjust time as needed */
